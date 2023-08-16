@@ -2,12 +2,13 @@ import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
 import envConfig from "../configs/envConfigs.js";
+import generator from "generate-password";
 
 import User from "../models/User.js";
-import { HttpError } from "../helpers/index.js";
+import { HttpError, mailer } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
-const { JWT_SECRET } = envConfig;
+const { JWT_SECRET, UKR_NET_EMAIL } = envConfig;
 
 const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -62,6 +63,16 @@ const login = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { email, name, avatarURL, requirements } = req.user;
+  res.json({
+    email,
+    name,
+    avatarURL,
+    requirements,
+  });
+};
+
 const logout = async (req, res) => {
   const { _id } = req.user;
 
@@ -71,9 +82,35 @@ const logout = async (req, res) => {
     message: "Logout success",
   });
 };
+const resendPassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "email not found");
+  }
+  const newPassword = generator.generate({
+    length: 10,
+    numbers: true,
+  });
+  const hashPassword = await bcrypt.hash(newPassword, 10);
+  await User.findByIdAndUpdate(user._id, { password: hashPassword });
 
+  const resetPassword = {
+    from: UKR_NET_EMAIL,
+    to: email,
+    subject: "reset password",
+    html: `<p>${newPassword}</p>`,
+  };
+  await mailer(resetPassword);
+
+  res.status(201).json({
+    email,
+  });
+};
 export default {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
+  getCurrent: ctrlWrapper(getCurrent),
+  resendPassword: ctrlWrapper(resendPassword),
 };

@@ -18,7 +18,13 @@ authRouter.post(
   validateBody(usersSchemas.userLoginSchema),
   authControllers.login
 );
+authRouter.get("/current", authenticate, authControllers.getCurrent);
 
 authRouter.post("/logout", authenticate, authControllers.logout);
+authRouter.post(
+  "/forgot-password",
+  validateBody(usersSchemas.userEmailSchema),
+  authControllers.resendPassword
+);
 
 export default authRouter;

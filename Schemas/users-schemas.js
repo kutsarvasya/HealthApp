@@ -14,8 +14,13 @@ const userLoginSchema = Joi.object({
     .required(),
   password: Joi.string().min(6).max(16).required(),
 });
-
+const userEmailSchema = Joi.object({
+  email: Joi.string()
+    .pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+    .required(),
+});
 export default {
   userSignupSchema,
   userLoginSchema,
+  userEmailSchema,
 };
