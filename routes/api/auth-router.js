@@ -3,7 +3,7 @@ import express from "express";
 import authControllers from "../../controllers/auth-controllers.js";
 import { validateBody } from "../../decorators/index.js";
 import usersSchemas from "../../Schemas/users-schemas.js";
-import authenticate from "../../middlewares/authenticate.js";
+import { authenticate, upload } from "../../middlewares/index.js";
 
 const authRouter = express.Router();
 
@@ -34,6 +34,12 @@ authRouter.post(
   authControllers.requirements
 );
 
-authRouter.patch("/settings", authControllers.setSettings);
+authRouter.post(
+  "/settings",
+  authenticate,
+  upload.single("avatar"),
+  validateBody(usersSchemas.userRequirementsSchema),
+  authControllers.setSettings
+);
 
 export default authRouter;

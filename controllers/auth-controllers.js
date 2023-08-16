@@ -129,14 +129,24 @@ const requirements = async (req, res) => {
   const { _id } = req.user;
   const user = await User.findByIdAndUpdate(
     _id,
-    { ...req.body },
+    { ...req.body, requirements: true },
     { new: true }
   );
   res.status(200).json(user);
 };
 
 const setSettings = async (req, res) => {
-  console.log(req);
+  const { _id } = req.user;
+  const avatarURL = req.file?.path ? req.file.path : req.user.avatarURL;
+  const user = await User.findByIdAndUpdate(
+    _id,
+    {
+      ...req.body,
+      avatarURL,
+    },
+    { new: true }
+  );
+  res.json(user);
 };
 
 export default {

@@ -1,33 +1,24 @@
 import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import multer from "multer";
 import "dotenv/config";
 
-import {
-  CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-} from "../configs/envConfigs";
+import envConfig from "../configs/envConfigs.js";
 
 cloudinary.config({
-  cloud_name: CLOUDINARY_CLOUD_NAME,
-  api_key: CLOUDINARY_API_KEY,
-  api_secret: CLOUDINARY_API_SECRET,
+  cloud_name: envConfig.CLOUDINARY_CLOUD_NAME,
+  api_key: envConfig.CLOUDINARY_API_KEY,
+  api_secret: envConfig.CLOUDINARY_API_SECRET,
+});
+const storage = new CloudinaryStorage({
+  cloudinary,
+
+  params: {
+    folder: "avatars",
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
 });
 
-function upload(req, res, next) {
-  const { avatarURL } = req.body;
-  console.log();
-  cloudinary.uploader.upload(
-    avatarURL,
-    { folder: "avatars" },
-    function (error, result) {
-      if (error) {
-        return res.status(500).json({ message: "Error uploading to server" });
-      }
-
-      req.avatarUrl = result.secure_url;
-      next();
-    }
-  );
-}
+const upload = multer({ storage });
 
 export default upload;
