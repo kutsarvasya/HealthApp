@@ -10,26 +10,21 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
 });
 
-async function upload(req, res, next) {
-  await upload.single("avatar")(req, res, function (err) {
-    if (err) {
-      return res.status(400).json({ message: "File upload error" });
-    }
+function upload(req, res, next) {
+  const { avatarURL } = req.body;
 
-    cloudinary.uploader.upload(
-      req.file.path,
-      { folder: "avatars" },
-      function (error, result) {
-        if (error) {
-          return res.status(500).json({ message: "Error uploading to server" });
-        }
-
-        // Сохраните URL аватарки в базе данных юзера
-        req.avatarUrl = result.secure_url;
-        next();
+  cloudinary.uploader.upload(
+    avatarURL,
+    { folder: "avatars" },
+    function (error, result) {
+      if (error) {
+        return res.status(500).json({ message: "Error uploading to server" });
       }
-    );
-  });
+
+      req.avatarUrl = result.secure_url;
+      next();
+    }
+  );
 }
 
 export default upload;
