@@ -1,10 +1,13 @@
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
+import envConfig from "../configs/envConfigs.js";
 
 import User from "../models/User.js";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
+
+const { JWT_SECRET } = envConfig;
 
 const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -24,6 +27,7 @@ const signup = async (req, res) => {
     user: {
       email: newUser.email,
       name: newUser.name,
+      requirements: newUser.requirements,
       avatar: avatarURL,
     },
   });
@@ -45,15 +49,16 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, "vnfjbvfhv7r7rer66", { expiresIn: "23h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
-  await User.findByIdAndUpdate(user._id, { token });
+  const newUser = await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
-    token: token,
-    user: {
-      email: user.email,
-    },
+    token,
+    email: newUser.email,
+    name: newUser.name,
+    avatarURL: newUser.avatarURL,
+    requirements: newUser.requirements,
   });
 };
 
@@ -61,7 +66,7 @@ const logout = async (req, res) => {
   const { _id } = req.user;
 
   await User.findByIdAndUpdate(_id, { token: "" });
-  
+
   res.status(200).json({
     message: "Logout success",
   });

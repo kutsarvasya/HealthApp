@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
+import envConfig from "./configs/envConfigs.js";
+// import dotenv from "dotenv";
+// dotenv.config();
 
 import app from "./app.js";
 
-const { DB_HOST } = process.env;
+const { DB_HOST } = envConfig;
 
 mongoose
   .connect(DB_HOST)
