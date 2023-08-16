@@ -32,6 +32,41 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    goal: {
+      type: String,
+      enum: ["lose fat", "maintain", "gain muscle"],
+      default: "lose fat",
+      required: true,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+      default: "male",
+      required: true,
+    },
+    age: {
+      type: String,
+      default: "",
+    },
+    height: {
+      type: String,
+      default: "",
+    },
+    weight: {
+      type: String,
+      default: "",
+    },
+    activity: {
+      type: String,
+      enum: ["1.2", "1.375", "1.55", "1.725", "1.9"],
+      default: "1.2",
+      required: true,
+    },
+    // owner: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "user",
+    //   required: true,
+    // },
   },
   { versionKey: false, timestamps: true }
 );
