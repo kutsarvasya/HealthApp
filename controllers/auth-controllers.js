@@ -113,10 +113,23 @@ const resendPassword = async (req, res) => {
     email,
   });
 };
+
+const uploadAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { avatarURL } = req.body;
+
+  await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
+
+  res.status(200).json({
+    avatarURL,
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
   resendPassword: ctrlWrapper(resendPassword),
+  uploadAvatar: ctrlWrapper(uploadAvatar),
 };
