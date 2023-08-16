@@ -1,6 +1,4 @@
-const signup = async (req, res) => {
-  console.log(1111);
-};
+const signup = async (req, res) => {};
 
 export default {
   signup,
