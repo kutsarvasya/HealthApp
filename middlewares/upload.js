@@ -15,7 +15,7 @@ cloudinary.config({
 
 function upload(req, res, next) {
   const { avatarURL } = req.body;
-
+  console.log();
   cloudinary.uploader.upload(
     avatarURL,
     { folder: "avatars" },

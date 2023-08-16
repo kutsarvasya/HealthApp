@@ -27,4 +27,13 @@ authRouter.post(
   authControllers.resendPassword
 );
 
+authRouter.post(
+  "/requirements",
+  authenticate,
+  validateBody(usersSchemas.userRequirementsSchema),
+  authControllers.requirements
+);
+
+authRouter.patch("/settings", authControllers.setSettings);
+
 export default authRouter;

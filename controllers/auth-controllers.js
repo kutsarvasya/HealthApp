@@ -125,6 +125,20 @@ const uploadAvatar = async (req, res) => {
   });
 };
 
+const requirements = async (req, res) => {
+  const { _id } = req.user;
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { ...req.body },
+    { new: true }
+  );
+  res.status(200).json(user);
+};
+
+const setSettings = async (req, res) => {
+  console.log(req);
+};
+
 export default {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
@@ -132,4 +146,6 @@ export default {
   getCurrent: ctrlWrapper(getCurrent),
   resendPassword: ctrlWrapper(resendPassword),
   uploadAvatar: ctrlWrapper(uploadAvatar),
+  requirements: ctrlWrapper(requirements),
+  setSettings: ctrlWrapper(setSettings),
 };
