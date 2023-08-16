@@ -1,8 +1,11 @@
 import { v2 as cloudinary } from "cloudinary";
 import "dotenv/config";
 
-const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
-  process.env;
+import {
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+} from "../configs/envConfigs";
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD_NAME,
