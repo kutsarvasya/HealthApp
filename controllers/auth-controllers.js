@@ -30,14 +30,17 @@ const signup = async (req, res) => {
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   await User.findByIdAndUpdate(newUser._id, { token });
   res.status(201).json({
-    user: {
-      email: newUser.email,
-      name: newUser.name,
-      requirements: newUser.requirements,
-      avatar: avatarURL,
-      token,
-    },
+    user: newUser,
   });
+  // res.status(201).json({
+  //   user: {
+  //     email: newUser.email,
+  //     name: newUser.name,
+  //     requirements: newUser.requirements,
+  //     avatar: avatarURL,
+  //     token,
+  //   },
+  // });
 };
 
 const login = async (req, res) => {
@@ -61,11 +64,7 @@ const login = async (req, res) => {
   const newUser = await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
-    token,
-    email: newUser.email,
-    name: newUser.name,
-    avatarURL: newUser.avatarURL,
-    requirements: newUser.requirements,
+    user: newUser,
   });
 };
 
