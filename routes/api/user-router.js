@@ -4,6 +4,7 @@ import { validateBody } from "../../decorators/index.js";
 import { authenticate, upload } from "../../middlewares/index.js";
 import requirementsSchemas from "../../Schemas/requirements-schemas.js";
 import requirementController from "../../controllers/requirement-controller.js";
+import mealController from "../../controllers/meal-controller.js";
 
 const userRouter = express.Router();
 
@@ -28,5 +29,7 @@ userRouter.put(
   validateBody(requirementsSchemas.userChangeGoalSchema),
   requirementController.changeGoal
 );
+
+userRouter.post("/food-intake", authenticate, mealController.getMealInfo);
 
 export default userRouter;
