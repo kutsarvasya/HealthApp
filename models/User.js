@@ -46,15 +46,15 @@ const userSchema = new Schema(
     },
     age: {
       type: String,
-      default: "",
+      default: "0",
     },
     height: {
       type: String,
-      default: "",
+      default: "0",
     },
     weight: {
       type: String,
-      default: "",
+      default: "0",
     },
     activity: {
       type: String,
