@@ -4,9 +4,7 @@ import { handleSaveError } from "./hooks/index.js";
 const mealSchema = new Schema(
   {
     date: {
-      type: Date,
-      default: Date.now,
-      required: true,
+      type: String,
     },
     breakfast: {
       carbonohidrates: {

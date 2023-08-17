@@ -1,10 +1,12 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import Meal from "../models/Meal.js";
+import { format } from "date-fns";
 
 const getMealInfo = async (req, res) => {
   const { _id: owner } = req.user;
   const { breakfast, lunch, dinner, snack } = req.body;
-  const currentDate = new Date().setHours(0, 0, 0, 0);
+  const currentDate = format(new Date(), "yyyy-MM-dd");
+  console.log(currentDate);
 
   const currentMeal = await Meal.findOne({ owner, date: currentDate });
 
