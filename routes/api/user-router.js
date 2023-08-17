@@ -39,12 +39,20 @@ userRouter.get(
   checkUser,
   mealController.getMealInfo
 );
+
 userRouter.post(
   "/water-intake",
   authenticate,
   validateBody(mealsSchemas.mealsSetWaterSchema),
   checkUser,
   mealController.setWater
+);
+
+userRouter.post(
+  "/food-intake",
+  authenticate,
+  checkUser,
+  mealController.setMeal
 );
 // userRouter.post("/breakfast", authenticate, checkUser, mealController);
 // userRouter.post("/lunch", authenticate, checkUser, mealController);

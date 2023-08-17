@@ -29,18 +29,22 @@ const signup = async (req, res) => {
   };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   await User.findByIdAndUpdate(newUser._id, { token });
+
   res.status(201).json({
-    user: newUser,
+    user: {
+      email: newUser.email,
+      name: newUser.name,
+      requirements: newUser.requirements,
+      avatar: avatarURL,
+      token,
+      goal: newUser.goal,
+      gender: newUser.gender,
+      age: newUser.age,
+      height: newUser.height,
+      weight: newUser.weight,
+      activity: newUser.activity,
+    },
   });
-  // res.status(201).json({
-  //   user: {
-  //     email: newUser.email,
-  //     name: newUser.name,
-  //     requirements: newUser.requirements,
-  //     avatar: avatarURL,
-  //     token,
-  //   },
-  // });
 };
 
 const login = async (req, res) => {
@@ -87,6 +91,7 @@ const logout = async (req, res) => {
     message: "Logout success",
   });
 };
+
 const resendPassword = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
