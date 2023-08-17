@@ -15,14 +15,14 @@ userRouter.post(
   requirementController.setSettings
 );
 
-userRouter.patch(
+userRouter.put(
   "/weight",
   authenticate,
   validateBody(requirementsSchemas.userChangeWeightSchema),
   requirementController.changeWeight
 );
 
-userRouter.patch(
+userRouter.put(
   "/goal",
   authenticate,
   validateBody(requirementsSchemas.userChangeGoalSchema),
