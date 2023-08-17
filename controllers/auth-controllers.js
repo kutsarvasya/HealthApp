@@ -135,19 +135,6 @@ const requirements = async (req, res) => {
   res.status(200).json(user);
 };
 
-const setSettings = async (req, res) => {
-  const { _id } = req.user;
-  const avatarURL = req.file?.path ? req.file.path : req.user.avatarURL;
-  const user = await User.findByIdAndUpdate(
-    _id,
-    {
-      ...req.body,
-      avatarURL,
-    },
-    { new: true }
-  );
-  res.json(user);
-};
 
 export default {
   signup: ctrlWrapper(signup),
@@ -157,5 +144,4 @@ export default {
   resendPassword: ctrlWrapper(resendPassword),
   uploadAvatar: ctrlWrapper(uploadAvatar),
   requirements: ctrlWrapper(requirements),
-  setSettings: ctrlWrapper(setSettings),
 };
