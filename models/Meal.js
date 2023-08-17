@@ -7,83 +7,65 @@ const mealSchema = new Schema(
       type: String,
     },
     breakfast: {
-      carbonohidrates: {
-        type: Number,
-        default: 0,
-      },
-      calories: {
-        type: Number,
-        default: 0,
-      },
-      protein: {
-        type: Number,
-        default: 0,
-      },
-      fat: {
-        type: Number,
-        default: 0,
-      },
+      type: Array,
+      default: [],
+      required: true,
     },
+
     lunch: {
-      carbonohidrates: {
-        type: Number,
-        default: 0,
-      },
-      calories: {
-        type: Number,
-        default: 0,
-      },
-      protein: {
-        type: Number,
-        default: 0,
-      },
-      fat: {
-        type: Number,
-        default: 0,
-      },
+      type: Array,
+      default: [],
+      required: true,
     },
     dinner: {
-      carbonohidrates: {
-        type: Number,
-        default: 0,
-      },
-      calories: {
-        type: Number,
-        default: 0,
-      },
-      protein: {
-        type: Number,
-        default: 0,
-      },
-      fat: {
-        type: Number,
-        default: 0,
-      },
+      type: Array,
+      default: [],
+      required: true,
     },
     snack: {
-      carbonohidrates: {
-        type: Number,
-        default: 0,
-      },
-      calories: {
-        type: Number,
-        default: 0,
-      },
-      protein: {
-        type: Number,
-        default: 0,
-      },
-      fat: {
-        type: Number,
-        default: 0,
-      },
+      type: Array,
+      default: [],
+      required: true,
     },
     water: {
       type: Number,
-      default: 1500,
+      default: 0,
+      required: true,
+    },
+    defaultWater: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    calories: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    defaultCalories: {
+      type: Number,
+      default: 0,
+      required: true,
     },
     weight: {
       type: Number,
+      default: 0,
+      required: true,
+    },
+    carbonohidrates: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    fat: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    protein: {
+      type: Number,
+      default: 0,
+      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,

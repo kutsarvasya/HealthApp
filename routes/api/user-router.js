@@ -1,10 +1,11 @@
 import express from "express";
 
 import { validateBody } from "../../decorators/index.js";
-import { authenticate, upload } from "../../middlewares/index.js";
+import { authenticate, upload, checkUser } from "../../middlewares/index.js";
 import requirementsSchemas from "../../Schemas/requirements-schemas.js";
 import requirementController from "../../controllers/requirement-controller.js";
 import mealController from "../../controllers/meal-controller.js";
+import mealsSchemas from "../../Schemas/meals-schemas.js";
 
 const userRouter = express.Router();
 
@@ -30,6 +31,23 @@ userRouter.put(
   requirementController.changeGoal
 );
 
-userRouter.post("/food-intake", authenticate, mealController.getMealInfo);
+// userRouter.post("/food-intake", authenticate, mealController.addMealInfo);
 
+userRouter.get(
+  "/food-intake",
+  authenticate,
+  checkUser,
+  mealController.getMealInfo
+);
+userRouter.post(
+  "/water-intake",
+  authenticate,
+  validateBody(mealsSchemas.mealsSetWaterSchema),
+  checkUser,
+  mealController.setWater
+);
+// userRouter.post("/breakfast", authenticate, checkUser, mealController);
+// userRouter.post("/lunch", authenticate, checkUser, mealController);
+// userRouter.post("/dinner", authenticate, checkUser, mealController);
+// userRouter.post("/snack", authenticate, checkUser, mealController);
 export default userRouter;
