@@ -97,6 +97,8 @@ const resendPassword = async (req, res) => {
   const newPassword = generator.generate({
     length: 10,
     numbers: true,
+    lowercase: true,
+    uppercase: true,
   });
   const hashPassword = await bcrypt.hash(newPassword, 10);
   await User.findByIdAndUpdate(user._id, { password: hashPassword });
@@ -134,7 +136,6 @@ const requirements = async (req, res) => {
   );
   res.status(200).json(user);
 };
-
 
 export default {
   signup: ctrlWrapper(signup),
