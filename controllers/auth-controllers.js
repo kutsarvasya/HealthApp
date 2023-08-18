@@ -111,7 +111,10 @@ const resendPassword = async (req, res) => {
     from: UKR_NET_EMAIL,
     to: email,
     subject: "reset password",
-    html: `<p>${newPassword}</p>`,
+    html: `<strong>Hello,</strong><br>
+    <p>This is your new password:</p>
+    <strong>${newPassword}</strong><br>
+    <p>Please use it to log in to your account.</p>`,
   };
   await mailer(resetPassword);
 

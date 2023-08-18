@@ -22,6 +22,7 @@ authRouter.post(
 authRouter.get("/current", authenticate, authControllers.getCurrent);
 
 authRouter.post("/logout", authenticate, authControllers.logout);
+
 authRouter.post(
   "/forgot-password",
   validateBody(usersSchemas.userEmailSchema),
@@ -34,6 +35,5 @@ authRouter.post(
   validateBody(requirementsSchemas.userRequirementsSchema),
   authControllers.requirements
 );
-
 
 export default authRouter;

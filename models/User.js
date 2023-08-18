@@ -45,16 +45,16 @@ const userSchema = new Schema(
       required: true,
     },
     age: {
-      type: String,
-      default: "0",
+      type: Number,
+      default: 0,
     },
     height: {
-      type: String,
-      default: "0",
+      type: Number,
+      default: 0,
     },
     weight: {
-      type: String,
-      default: "0",
+      type: Number,
+      default: 0,
     },
     activity: {
       type: String,
@@ -62,11 +62,6 @@ const userSchema = new Schema(
       default: "1.2",
       required: true,
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    //   required: true,
-    // },
   },
   { versionKey: false, timestamps: true }
 );

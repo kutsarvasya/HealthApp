@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const mealsSetWaterSchema = Joi.object({
-  water: Joi.string().required(),
+  water: Joi.number().required(),
 });
 
 const foodSchema = Joi.object({

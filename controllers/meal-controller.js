@@ -36,6 +36,10 @@ const setMeal = async (req, res) => {
   let car = carbonohidrates;
   let pro = protein;
 
+  let faq = fat;
+  let carq = carbonohidrates;
+  let proq = protein;
+
   const results = req.meals[currentOne].filter(({ foodName: id1 }) =>
     currentTwo.some(({ foodName: id2 }) => id2 === id1)
   );
@@ -48,6 +52,9 @@ const setMeal = async (req, res) => {
     fa += Number(food.fat) * 9;
     car += Number(food.carbonohidrates) * 4;
     pro += Number(food.protein) * 4;
+    faq += Number(food.fat);
+    carq += Number(food.carbonohidrates);
+    proq += Number(food.protein);
     switch (currentOne) {
       case "breakfast":
         breakfast.push(food);
@@ -74,9 +81,9 @@ const setMeal = async (req, res) => {
       snack,
       lunch,
       calories: cal,
-      protein: pro,
-      carbonohidrates: car,
-      fat: fa,
+      protein: proq,
+      carbonohidrates: carq,
+      fat: faq,
     },
     { new: true }
   );
