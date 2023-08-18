@@ -7,7 +7,7 @@ const userSignupSchema = Joi.object({
     .string()
     .minOfLowercase(1)
     .minOfUppercase(1)
-    .minOfNumeric(6)
+    .minOfNumeric(4)
     .noWhiteSpaces()
     .onlyLatinCharacters()
     .messages({
@@ -25,20 +25,23 @@ const userSignupSchema = Joi.object({
     }),
   email: Joi.string()
     .pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
-    .required(),
-  name: Joi.string().min(2).required(),
+    .required()
+    .trim(),
+  name: Joi.string().min(2).required().trim(),
 });
 
 const userLoginSchema = Joi.object({
   email: Joi.string()
     .pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
-    .required(),
+    .required()
+    .trim(),
   password: Joi.string().min(6).max(16).required(),
 });
 const userEmailSchema = Joi.object({
   email: Joi.string()
     .pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
-    .required(),
+    .required()
+    .trim(),
 });
 
 export default {

@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 import envConfig from "./configs/envConfigs.js";
-// import dotenv from "dotenv";
-// dotenv.config();
 
 import app from "./app.js";
 

@@ -1,7 +1,8 @@
+import { format } from "date-fns";
+
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import Meal from "../models/Meal.js";
-import { format } from "date-fns";
 
 const getMealInfo = async (req, res) => {
   const currentDate = format(new Date(), "yyyy-MM-dd");
@@ -29,26 +30,33 @@ const setMeal = async (req, res) => {
   const { breakfast, dinner, snack, lunch, carbonohidrates, fat, protein } =
     req.meals;
   const currentDate = format(new Date(), "yyyy-MM-dd");
-  const currentOne = Object.keys(req.body)[0];
-  const currentTwo = req.body[currentOne];
+  const mealName = Object.keys(req.body)[0];
+  const foodArr = req.body[mealName];
 
-  let fa = fat;
-  let car = carbonohidrates;
-  let pro = protein;
+  let fatCal = fat;
+  let carbonohidratesCal = carbonohidrates;
+  let proteinCal = protein;
 
-  const results = req.meals[currentOne].filter(({ foodName: id1 }) =>
-    currentTwo.some(({ foodName: id2 }) => id2 === id1)
+  let newFat = fat;
+  let newCarbonohidrates = carbonohidrates;
+  let newProtein = protein;
+
+  const results = req.meals[mealName].filter(({ foodName: id1 }) =>
+    foodArr.some(({ foodName: id2 }) => id2 === id1)
   );
 
   if (results.length > 0) {
     throw HttpError(400, "This food is already exist");
   }
 
-  currentTwo.map((food) => {
-    fa += Number(food.fat) * 9;
-    car += Number(food.carbonohidrates) * 4;
-    pro += Number(food.protein) * 4;
-    switch (currentOne) {
+  foodArr.map((food) => {
+    fatCal += Number(food.fat) * 9;
+    carbonohidratesCal += Number(food.carbonohidrates) * 4;
+    proteinCal += Number(food.protein) * 4;
+    newFat += Number(food.fat);
+    newCarbonohidrates += Number(food.carbonohidrates);
+    newProtein += Number(food.protein);
+    switch (mealName) {
       case "breakfast":
         breakfast.push(food);
         break;
@@ -65,7 +73,7 @@ const setMeal = async (req, res) => {
         break;
     }
   });
-  const cal = pro + car + fa;
+  const cal = proteinCal + carbonohidratesCal + fatCal;
   const data = await Meal.findOneAndUpdate(
     { owner: _id, date: currentDate },
     {
@@ -74,9 +82,9 @@ const setMeal = async (req, res) => {
       snack,
       lunch,
       calories: cal,
-      protein: pro,
-      carbonohidrates: car,
-      fat: fa,
+      protein: newProtein,
+      carbonohidrates: newCarbonohidrates,
+      fat: newFat,
     },
     { new: true }
   );
@@ -91,21 +99,22 @@ const updateMeal = async (req, res) => {
   if (!meal) {
     throw HttpError(404, "Not Found");
   }
-  const currentOne = Object.keys(req.body)[0];
-  const currentTwo = req.body[currentOne];
+  const mealName = Object.keys(req.body)[0];
+  const foodArr = req.body[mealName];
 
-  const newMeals = meal[currentOne].map((data) => {
-    if (data.foodName === currentTwo.foodName) {
-      return currentTwo;
+  const newMeals = meal[mealName].map((data) => {
+    if (data.foodName === foodArr.foodName) {
+      return foodArr;
     }
     return data;
   });
 
   const data = await Meal.findByIdAndUpdate(
     id,
-    { [currentOne]: newMeals },
+    { [mealName]: newMeals },
     { new: true }
   );
+
   let calories = 0;
 
   const arr = [...data.breakfast, ...data.dinner, ...data.lunch, ...data.snack];

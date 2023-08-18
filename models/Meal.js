@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+
 import { handleSaveError } from "./hooks/index.js";
 
 const mealSchema = new Schema(

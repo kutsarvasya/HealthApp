@@ -1,12 +1,13 @@
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
-import envConfig from "../configs/envConfigs.js";
 import generator from "generate-password";
 
 import User from "../models/User.js";
 import { HttpError, mailer } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
+import envConfig from "../configs/envConfigs.js";
+
 
 const { JWT_SECRET, UKR_NET_EMAIL } = envConfig;
 
@@ -111,7 +112,10 @@ const resendPassword = async (req, res) => {
     from: UKR_NET_EMAIL,
     to: email,
     subject: "reset password",
-    html: `<p>${newPassword}</p>`,
+    html: `<strong>Hello,</strong><br>
+    <p>This is your new password:</p>
+    <strong>${newPassword}</strong><br>
+    <p>Please use it to log in to your account.</p>`,
   };
   await mailer(resetPassword);
 
