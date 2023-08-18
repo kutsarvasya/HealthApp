@@ -53,8 +53,16 @@ const updateMealSchema = Joi.object({
     "object.xor": "Please enter only one of Breakfast, Lunch, Snack, or Dinner",
   });
 
+const getStatisticsSchema = Joi.object({
+  date: Joi.string()
+    .regex(/^\d{4}-\d{2}$/)
+    .message('Date  format  should be "YYYY-MM"')
+    .required(),
+});
+
 export default {
   mealsSetWaterSchema,
   mealSchema,
   updateMealSchema,
+  getStatisticsSchema,
 };
