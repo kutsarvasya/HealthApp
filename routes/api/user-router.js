@@ -31,8 +31,6 @@ userRouter.put(
   requirementController.changeGoal
 );
 
-// userRouter.post("/food-intake", authenticate, mealController.addMealInfo);
-
 userRouter.get(
   "/food-intake",
   authenticate,
@@ -51,11 +49,11 @@ userRouter.post(
 userRouter.post(
   "/food-intake",
   authenticate,
+  validateBody(mealsSchemas.mealSchema),
   checkUser,
   mealController.setMeal
 );
-// userRouter.post("/breakfast", authenticate, checkUser, mealController);
-// userRouter.post("/lunch", authenticate, checkUser, mealController);
-// userRouter.post("/dinner", authenticate, checkUser, mealController);
-// userRouter.post("/snack", authenticate, checkUser, mealController);
+
+userRouter.get("/statistics", authenticate, mealController.getStatistics);
+
 export default userRouter;
