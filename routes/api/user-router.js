@@ -61,6 +61,11 @@ userRouter.put(
   mealController.updateMeal
 );
 
-userRouter.get("/statistics", authenticate, mealController.getStatistics);
+userRouter.get(
+  "/statistics",
+  authenticate,
+  validateBody(mealsSchemas.getStatisticsSchema),
+  mealController.getStatistics
+);
 
 export default userRouter;
