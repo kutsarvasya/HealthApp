@@ -17,7 +17,6 @@ const transporter = nodemailer.createTransport({
 const mailer = async (massage) => {
   transporter.sendMail(massage, (err, info) => {
     if (err) return console.log("ошибка", err);
-    console.log(info);
   });
   return true;
 };

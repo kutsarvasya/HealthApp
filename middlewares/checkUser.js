@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+
 import Meal from "../models/Meal.js";
 
 const checkUser = async (req, res, next) => {

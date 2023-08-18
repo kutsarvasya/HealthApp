@@ -1,12 +1,13 @@
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
-import envConfig from "../configs/envConfigs.js";
 import generator from "generate-password";
 
 import User from "../models/User.js";
 import { HttpError, mailer } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
+import envConfig from "../configs/envConfigs.js";
+
 
 const { JWT_SECRET, UKR_NET_EMAIL } = envConfig;
 
