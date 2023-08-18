@@ -54,6 +54,13 @@ userRouter.post(
   mealController.setMeal
 );
 
+userRouter.put(
+  "/food-intake/:id",
+  authenticate,
+  validateBody(mealsSchemas.updateMealSchema),
+  mealController.updateMeal
+);
+
 userRouter.get("/statistics", authenticate, mealController.getStatistics);
 
 export default userRouter;
