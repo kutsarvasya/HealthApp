@@ -1,0 +1,176 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "health-app",
+    "description": "Health-api Swagger Documentation",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:4000" }, { "url": "" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "Signup user",
+        "operationId": "signup-ser",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "format": "name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password must contain minimum 6 symbols, at least one number, and both lower and uppercase letters",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "description": "User's name",
+              "format": "name"
+            },
+            "requirements": {
+              "type": "boolean",
+              "description": "User's requirements"
+            },
+            "avatar": {
+              "type": "string",
+              "description": "User's avatar",
+              "format": "file"
+            },
+            "token": {
+              "type": "string",
+              "description": "User's token",
+              "format": "token"
+            },
+            "goal": {
+              "type": "string",
+              "description": "User's goal",
+              "format": "goal"
+            },
+            "gender": {
+              "type": "string",
+              "description": "User's gender",
+              "format": "gender"
+            },
+            "age": {
+              "type": "number",
+              "description": "User's age",
+              "format": "age"
+            },
+            "height": {
+              "type": "number",
+              "description": "User's height",
+              "format": "height"
+            },
+            "weight": {
+              "type": "number",
+              "description": "User's weight",
+              "format": "weight"
+            },
+            "activity": {
+              "type": "string",
+              "description": "User's activity",
+              "format": "activity"
+            }
+          }
+        },
+        "example": {
+          "user": {
+            "email": "user@gmail.com",
+            "name": "User",
+            "requirements": false,
+            "avatar": "//www.gravatar.com/avatar/cba1f2d695a5ca39ee6f343297a761a4",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGZjNGUxYzg2NTMyMWVjYTE2NjQ2MyIsImlhdCI6MTY5MjM4NjUyOSwiZXhwIjoxNjkyNDY5MzI5fQ.2lKC8iVYcUnEAUS9pE07snRRLncu5qorgdrbiE01v0s",
+            "goal": "lose fat",
+            "gender": "male",
+            "age": 0,
+            "height": 0,
+            "weight": 0,
+            "activity": "1.2"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
