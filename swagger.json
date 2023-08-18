@@ -11,7 +11,10 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:4000" }, { "url": "" }],
+  "servers": [
+    { "url": "http://localhost:4000" },
+    { "url": "https://health-app-1rfu.onrender.com/" }
+  ],
   "tags": [
     {
       "name": "Auth",
