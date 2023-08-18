@@ -74,9 +74,11 @@ const setMeal = async (req, res) => {
   res.json(data);
 };
 
+const getStatistics = async (req, res) => {};
+
 export default {
-  // addMealInfo: ctrlWrapper(addMealInfo),
   setWater: ctrlWrapper(setWater),
   getMealInfo: ctrlWrapper(getMealInfo),
   setMeal: ctrlWrapper(setMeal),
+  getStatistics: ctrlWrapper(getStatistics),
 };
