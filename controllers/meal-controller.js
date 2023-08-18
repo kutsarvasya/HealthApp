@@ -1,4 +1,5 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
 import Meal from "../models/Meal.js";
 import { format } from "date-fns";
 
@@ -74,6 +75,43 @@ const setMeal = async (req, res) => {
   res.json(data);
 };
 
+const updateMeal = async (req, res) => {
+  const { id } = req.params;
+
+  const meal = await Meal.findById(id);
+
+  if (!meal) {
+    throw HttpError(404, "Not Found");
+  }
+  const currentOne = Object.keys(req.body)[0];
+  const currentTwo = req.body[currentOne];
+
+  const newMeals = meal[currentOne].map((data) => {
+    if (data.foodName === currentTwo.foodName) {
+      return currentTwo;
+    }
+    return data;
+  });
+
+  const data = await Meal.findByIdAndUpdate(
+    id,
+    { [currentOne]: newMeals },
+    { new: true }
+  );
+  let calories = 0;
+
+  const arr = [...data.breakfast, ...data.dinner, ...data.lunch, ...data.snack];
+  arr.forEach((item) => {
+    const a = item.carbonohidrates * 4 + item.protein * 4 + item.fat * 9;
+    calories += a;
+  });
+  calories = Math.round(calories);
+
+  const newData = await Meal.findByIdAndUpdate(id, { calories }, { new: true });
+
+  res.json(newData);
+};
+
 const getStatistics = async (req, res) => {};
 
 export default {
@@ -81,4 +119,5 @@ export default {
   getMealInfo: ctrlWrapper(getMealInfo),
   setMeal: ctrlWrapper(setMeal),
   getStatistics: ctrlWrapper(getStatistics),
+  updateMeal: ctrlWrapper(updateMeal),
 };

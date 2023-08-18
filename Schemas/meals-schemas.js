@@ -22,7 +22,39 @@ const mealSchema = Joi.object({
     "object.xor": "Please enter only one of Breakfast, Lunch, Snack, or Dinner",
   });
 
+const updateMealSchema = Joi.object({
+  breakfast: Joi.object({
+    foodName: Joi.string().required(),
+    carbonohidrates: Joi.string().required(),
+    fat: Joi.string().required(),
+    protein: Joi.string().required(),
+  }),
+  snack: Joi.object({
+    foodName: Joi.string().required(),
+    carbonohidrates: Joi.string().required(),
+    fat: Joi.string().required(),
+    protein: Joi.string().required(),
+  }),
+  dinner: Joi.object({
+    foodName: Joi.string().required(),
+    carbonohidrates: Joi.string().required(),
+    fat: Joi.string().required(),
+    protein: Joi.string().required(),
+  }),
+  lunch: Joi.object({
+    foodName: Joi.string().required(),
+    carbonohidrates: Joi.string().required(),
+    fat: Joi.string().required(),
+    protein: Joi.string().required(),
+  }),
+})
+  .xor("breakfast", "lunch", "snack", "dinner")
+  .messages({
+    "object.xor": "Please enter only one of Breakfast, Lunch, Snack, or Dinner",
+  });
+
 export default {
   mealsSetWaterSchema,
   mealSchema,
+  updateMealSchema,
 };
