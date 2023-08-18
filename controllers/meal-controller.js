@@ -120,7 +120,17 @@ const updateMeal = async (req, res) => {
   res.json(newData);
 };
 
-const getStatistics = async (req, res) => {};
+const getStatistics = async (req, res) => {
+  const { date } = req.body;
+
+  const state = await Meal.find({
+    date: {
+      $gt: `${date}-00`,
+      $lt: `${date}-32`,
+    },
+  }).sort({ date: 1 });
+  res.json(state);
+};
 
 export default {
   setWater: ctrlWrapper(setWater),
