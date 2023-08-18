@@ -36,6 +36,14 @@ const setMeal = async (req, res) => {
   let car = carbonohidrates;
   let pro = protein;
 
+  const results = req.meals[currentOne].filter(({ foodName: id1 }) =>
+    currentTwo.some(({ foodName: id2 }) => id2 === id1)
+  );
+
+  if (results.length > 0) {
+    throw HttpError(400, "This food is already exist");
+  }
+
   currentTwo.map((food) => {
     fa += Number(food.fat) * 9;
     car += Number(food.carbonohidrates) * 4;
