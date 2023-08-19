@@ -1,5 +1,7 @@
 import User from "../models/User.js";
+import Meal from "../models/Meal.js";
 import { ctrlWrapper } from "../decorators/index.js";
+import HttpError from "../helpers/HttpError.js";
 
 const setSettings = async (req, res) => {
   const { _id } = req.user;
@@ -17,12 +19,22 @@ const setSettings = async (req, res) => {
 
 const changeWeight = async (req, res) => {
   const { _id } = req.user;
+  const { _id: mealsId, changeWeight } = req.meals;
   const { weight } = req.body;
 
+  if (changeWeight) {
+    throw HttpError(400, "The weight could only change once a day");
+  }
+
   const user = await User.findByIdAndUpdate(_id, { weight }, { new: true });
+  await Meal.findByIdAndUpdate(mealsId, {
+    changeWeight: true,
+    weight: user.weight,
+  });
 
   res.json({
-    weight: user.weight,
+    weight,
+    changeWeight: true,
   });
 };
 

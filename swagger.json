@@ -85,6 +85,8 @@
           },
           "password": {
             "type": "string",
+            "minimum": 6,
+            "maximum": 16,
             "description": "User password must contain minimum 6 symbols, at least one number, and both lower and uppercase letters",
             "example": "qwerty123"
           }
@@ -130,12 +132,12 @@
               "format": "gender"
             },
             "age": {
-              "type": "number",
+              "type": "integer",
               "description": "User's age",
               "format": "age"
             },
             "height": {
-              "type": "number",
+              "type": "integer",
               "description": "User's height",
               "format": "height"
             },
