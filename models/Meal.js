@@ -68,6 +68,10 @@ const mealSchema = new Schema(
       default: 0,
       required: true,
     },
+    changeWeight: {
+      type: Boolean,
+      default: false,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",

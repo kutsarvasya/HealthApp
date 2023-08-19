@@ -13,13 +13,14 @@ userRouter.post(
   "/settings",
   authenticate,
   upload.single("avatar"),
-  validateBody(requirementsSchemas.userRequirementsSchema),
+  validateBody(requirementsSchemas.userSettingsSchema),
   requirementController.setSettings
 );
 
 userRouter.put(
   "/weight",
   authenticate,
+  checkUser,
   validateBody(requirementsSchemas.userChangeWeightSchema),
   requirementController.changeWeight
 );

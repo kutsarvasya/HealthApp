@@ -9,6 +9,17 @@ const userChangeGoalSchema = Joi.object({
 });
 
 const userRequirementsSchema = Joi.object({
+  goal: Joi.string().valid("lose fat", "maintain", "gain muscle").required(),
+  gender: Joi.string().valid("male", "female").required(),
+  age: Joi.number().required(),
+  height: Joi.number().required(),
+  weight: Joi.number().required(),
+  activity: Joi.string()
+    .valid("1.2", "1.375", "1.55", "1.725", "1.9")
+    .required(),
+});
+
+const userSettingsSchema = Joi.object({
   name: Joi.string().min(3).required().trim(),
   gender: Joi.string().valid("male", "female").required(),
   age: Joi.number().required(),
@@ -23,4 +34,5 @@ export default {
   userChangeWeightSchema,
   userChangeGoalSchema,
   userRequirementsSchema,
+  userSettingsSchema,
 };
