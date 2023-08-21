@@ -130,7 +130,7 @@ const updateMeal = async (req, res) => {
 };
 
 const getStatistics = async (req, res) => {
-  const { date } = req.body;
+  const { date } = req.query;
 
   const state = await Meal.find({
     date: {

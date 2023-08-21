@@ -65,7 +65,7 @@ userRouter.put(
 userRouter.get(
   "/statistics",
   authenticate,
-  validateBody(mealsSchemas.getStatisticsSchema),
+  // validateBody(mealsSchemas.getStatisticsSchema),
   mealController.getStatistics
 );
 
