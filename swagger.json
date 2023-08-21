@@ -431,19 +431,21 @@
         }
       }
     },
-    "/api/user/food-intake/:id": {
+    "/api/user/food-intake/{id}": {
       "put": {
         "tags": ["User"],
         "summary": "Update food for user",
         "operationId": "user`s meals",
-        "parameters": {
-          "name": "id",
-          "required": true,
-          "in": "path",
-          "schema": {
-            "type": "string"
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
           }
-        },
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Food object",
@@ -477,13 +479,13 @@
       "get": {
         "tags": ["User"],
         "summary": "Get user's statistics",
-        "operationId": "user`s statistics",
+        "operationId": "date",
         "security": [{ "Bearer": [] }],
         "parameters": [
           {
             "name": "date",
             "in": "query",
-            "required": false,
+            "required": true,
             "description": "Date for statistics",
             "schema": {
               "type": "string",
