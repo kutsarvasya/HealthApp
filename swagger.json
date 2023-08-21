@@ -1505,6 +1505,17 @@
       },
       "FoodIntakeIdRequest": {
         "type": "object",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "Identifier for the resource",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "required": ["foodName", "carbonohidrates", "protein", "fat"],
         "oneOf": [
           {
