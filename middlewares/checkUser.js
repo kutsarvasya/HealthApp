@@ -9,6 +9,9 @@ const checkUser = async (req, res, next) => {
   const data = await Meal.findOne({ owner: _id, date: currentDate });
 
   let BMR;
+  let goalFat;
+  let goalProtein;
+  let goalCarbo;
   const totalWater = 30 * weight;
   if (gender === "male") {
     BMR = Math.round(
@@ -20,6 +23,10 @@ const checkUser = async (req, res, next) => {
     );
   }
   let usersMeals;
+  goalFat = parseFloat((0.3 * BMR) / 4).toFixed(1);
+  goalProtein = parseFloat((0.3 * BMR) / 4).toFixed(1);
+  goalCarbo = parseFloat((0.4 * BMR) / 4).toFixed(1);
+
   if (!data) {
     usersMeals = await Meal.create({
       owner: _id,
@@ -27,6 +34,9 @@ const checkUser = async (req, res, next) => {
       defaultCalories: BMR,
       weight: weight,
       defaultWater: totalWater,
+      goalFat,
+      goalCarbo,
+      goalProtein,
     });
   } else {
     usersMeals = await Meal.findOneAndUpdate(

@@ -72,6 +72,18 @@ const mealSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    goalProtein: {
+      type: Number,
+      default: 0,
+    },
+    goalCarbo: {
+      type: Number,
+      default: 0,
+    },
+    goalFat: {
+      type: Number,
+      default: 0,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
