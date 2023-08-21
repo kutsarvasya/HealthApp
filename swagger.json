@@ -2,13 +2,15 @@
   "openapi": "3.0.1",
   "info": {
     "version": "2.0.2",
-    "title": "health-app",
+    "title": "Health-app",
     "description": "Health-api Swagger Documentation",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
   },
+  "consumes": ["application/json", "multiply-format"],
+  "produces": ["application/json"],
   "servers": [
     { "url": "http://localhost:4000" },
     { "url": "https://health-app-1rfu.onrender.com" }
@@ -29,7 +31,6 @@
         "tags": ["Auth"],
         "summary": "Signup user",
         "operationId": "signup-user",
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Registration object",
           "required": true,
@@ -69,6 +70,7 @@
         "summary": "Login user",
         "operationId": "login-user",
         "security": [{ "Bearer": [] }],
+
         "requestBody": {
           "description": "Login object",
           "required": true,
@@ -112,6 +114,7 @@
         "summary": "Get current user",
         "operationId": "current-user",
         "security": [{ "Bearer": [] }],
+
         "responses": {
           "200": {
             "description": "Logged user returned",
@@ -136,6 +139,7 @@
         "summary": "Set user`s requirements",
         "operationId": "user`s requirements",
         "security": [{ "Bearer": [] }],
+
         "requestBody": {
           "description": "Login object",
           "required": true,
@@ -237,6 +241,7 @@
         "tags": ["User"],
         "summary": "Set settings for user",
         "operationId": "user`s settings",
+        "consumes": ["multipart/form-data", "application/json"],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Settings object",
@@ -471,20 +476,22 @@
     "/api/user/statistics": {
       "get": {
         "tags": ["User"],
-        "summary": "Get user`s statistics",
+        "summary": "Get user's statistics",
         "operationId": "user`s statistics",
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Statistics object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StatisticsRequest"
-              }
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date for which to retrieve statistics",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "yyyy-mm",
+              "description": "Date in the format yyyy-mm"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "Statistics is successfully loaded",
@@ -497,7 +504,7 @@
             }
           },
           "400": {
-            "description": "Invalid request body"
+            "description": "Invalid request"
           }
         }
       }
@@ -870,36 +877,6 @@
         },
         "example": {
           "email": "ivanka@gmail.com"
-        }
-      },
-      "SettingsRequest": {
-        "type": "object",
-        "required": ["name", "gender", "age", "height", "weight", "activity"],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
-          "gender": {
-            "type": "string",
-            "description": "User's gender"
-          },
-          "age": {
-            "type": "integer",
-            "description": "User's age"
-          },
-          "height": {
-            "type": "integer",
-            "description": "User's height"
-          },
-          "weight": {
-            "type": "number",
-            "description": "User's weight"
-          },
-          "activity": {
-            "type": "string",
-            "description": "User's activity"
-          }
         }
       },
       "WeightRequest": {
@@ -1632,182 +1609,173 @@
           }
         }
       },
-      "StatisticsRequest": {
-        "type": "object",
-        "required": ["date"],
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "yyyy-mm",
-            "description": "Date in the format yyyy-mm"
-          }
-        }
-      },
       "StatisticsResponse": {
         "type": "object",
         "properties": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "_id": {
-                "type": "string",
-                "description": "Unique ID"
-              },
-              "date": {
-                "type": "string",
-                "format": "date",
-                "description": "Date in the format yyyy-mm-dd"
-              },
-              "breakfast": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "foodName": {
-                      "type": "string",
-                      "description": "Name of the food"
-                    },
-                    "carbonohidrates": {
-                      "type": "number",
-                      "description": "Carbohydrate content"
-                    },
-                    "protein": {
-                      "type": "number",
-                      "description": "Protein content"
-                    },
-                    "fat": {
-                      "type": "number",
-                      "description": "Fat content"
-                    }
-                  }
+          "type": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Unique ID"
                 },
-                "description": "Breakfast details"
-              },
-              "lunch": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "foodName": {
-                      "type": "string",
-                      "description": "Name of the food"
-                    },
-                    "carbonohidrates": {
-                      "type": "number",
-                      "description": "Carbohydrate content"
-                    },
-                    "protein": {
-                      "type": "number",
-                      "description": "Protein content"
-                    },
-                    "fat": {
-                      "type": "number",
-                      "description": "Fat content"
-                    }
-                  }
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Date in the format yyyy-mm-dd"
                 },
-                "description": "Lunch details"
-              },
-              "dinner": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "foodName": {
-                      "type": "string",
-                      "description": "Name of the food"
-                    },
-                    "carbonohidrates": {
-                      "type": "number",
-                      "description": "Carbohydrate content"
-                    },
-                    "protein": {
-                      "type": "number",
-                      "description": "Protein content"
-                    },
-                    "fat": {
-                      "type": "number",
-                      "description": "Fat content"
+                "breakfast": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
                     }
-                  }
+                  },
+                  "description": "Breakfast details"
                 },
-                "description": "Dinner details"
-              },
-              "snack": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "foodName": {
-                      "type": "string",
-                      "description": "Name of the food"
-                    },
-                    "carbonohidrates": {
-                      "type": "number",
-                      "description": "Carbohydrate content"
-                    },
-                    "protein": {
-                      "type": "number",
-                      "description": "Protein content"
-                    },
-                    "fat": {
-                      "type": "number",
-                      "description": "Fat content"
+                "lunch": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
                     }
-                  }
+                  },
+                  "description": "Lunch details"
                 },
-                "description": "Snack details"
-              },
-              "water": {
-                "type": "number",
-                "description": "Water consumed"
-              },
-              "defaultWater": {
-                "type": "number",
-                "description": "Default water intake"
-              },
-              "calories": {
-                "type": "number",
-                "description": "Calories consumed"
-              },
-              "defaultCalories": {
-                "type": "number",
-                "description": "Default calorie intake"
-              },
-              "weight": {
-                "type": "number",
-                "description": "User's weight"
-              },
-              "carbonohidrates": {
-                "type": "number",
-                "description": "Carbohydrate intake"
-              },
-              "fat": {
-                "type": "number",
-                "description": "Fat intake"
-              },
-              "protein": {
-                "type": "number",
-                "description": "Protein intake"
-              },
-              "changeWeight": {
-                "type": "boolean",
-                "description": "Whether user is tracking weight change"
-              },
-              "owner": {
-                "type": "string",
-                "description": "ID of the owner"
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "description": "Creation timestamp"
-              },
-              "updatedAt": {
-                "type": "string",
-                "format": "date-time",
-                "description": "Update timestamp"
+                "dinner": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
+                    }
+                  },
+                  "description": "Dinner details"
+                },
+                "snack": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
+                    }
+                  },
+                  "description": "Snack details"
+                },
+                "water": {
+                  "type": "number",
+                  "description": "Water consumed"
+                },
+                "defaultWater": {
+                  "type": "number",
+                  "description": "Default water intake"
+                },
+                "calories": {
+                  "type": "number",
+                  "description": "Calories consumed"
+                },
+                "defaultCalories": {
+                  "type": "number",
+                  "description": "Default calorie intake"
+                },
+                "weight": {
+                  "type": "number",
+                  "description": "User's weight"
+                },
+                "carbonohidrates": {
+                  "type": "number",
+                  "description": "Carbohydrate intake"
+                },
+                "fat": {
+                  "type": "number",
+                  "description": "Fat intake"
+                },
+                "protein": {
+                  "type": "number",
+                  "description": "Protein intake"
+                },
+                "changeWeight": {
+                  "type": "boolean",
+                  "description": "Whether user is tracking weight change"
+                },
+                "owner": {
+                  "type": "string",
+                  "description": "ID of the owner"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Creation timestamp"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Update timestamp"
+                }
               }
             }
           }
@@ -1883,13 +1851,42 @@
           }
         ]
       },
-
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+      "SettingsRequest": {
+        "type": "object",
+        "required": ["name", "gender", "age", "height", "weight", "activity"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender"
+          },
+          "age": {
+            "type": "integer",
+            "description": "User's age"
+          },
+          "height": {
+            "type": "integer",
+            "description": "User's height"
+          },
+          "weight": {
+            "type": "number",
+            "description": "User's weight"
+          },
+          "activity": {
+            "type": "string",
+            "description": "User's activity"
+          }
         }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
