@@ -1069,6 +1069,18 @@
             "type": "number",
             "description": "Default daily calorie intake"
           },
+          "goalFat": {
+            "type": "number",
+            "description": "Default daily fat"
+          },
+          "goalProtein": {
+            "type": "number",
+            "description": "Default daily protein"
+          },
+          "goalCarbo": {
+            "type": "number",
+            "description": "Default daily carbonohidrates"
+          },
           "weight": {
             "type": "number",
             "description": "User's weight"
@@ -1143,6 +1155,9 @@
           "defaultWater": 1680,
           "calories": 120,
           "defaultCalories": 2155,
+          "goalProtein": 170.9,
+          "goalCarbo": 50.6,
+          "goalFat": 66,
           "weight": 55,
           "carbonohidrates": 24,
           "fat": 26,
@@ -1421,6 +1436,18 @@
             "type": "number",
             "description": "Default daily calorie intake"
           },
+          "goalFat": {
+            "type": "number",
+            "description": "Default daily fat"
+          },
+          "goalProtein": {
+            "type": "number",
+            "description": "Default daily protein"
+          },
+          "goalCarbo": {
+            "type": "number",
+            "description": "Default daily carbonohidrates"
+          },
           "weight": {
             "type": "number",
             "description": "User's weight"
@@ -1495,6 +1522,9 @@
           "defaultWater": 1680,
           "calories": 143,
           "defaultCalories": 2155,
+          "goalProtein": 170.9,
+          "goalCarbo": 50.6,
+          "goalFat": 66,
           "weight": 55,
           "carbonohidrates": 26,
           "fat": 16,
@@ -1755,6 +1785,18 @@
                   "type": "number",
                   "description": "Default calorie intake"
                 },
+                "goalFat": {
+                  "type": "number",
+                  "description": "Default daily fat"
+                },
+                "goalProtein": {
+                  "type": "number",
+                  "description": "Default daily protein"
+                },
+                "goalCarbo": {
+                  "type": "number",
+                  "description": "Default daily carbonohidrates"
+                },
                 "weight": {
                   "type": "number",
                   "description": "User's weight"
@@ -1833,6 +1875,9 @@
             "defaultWater": 1680,
             "calories": 340,
             "defaultCalories": 2155,
+            "goalProtein": 170.9,
+            "goalCarbo": 50.6,
+            "goalFat": 66,
             "weight": 55,
             "carbonohidrates": 26,
             "fat": 16,
@@ -1853,6 +1898,9 @@
             "defaultWater": 0,
             "calories": 0,
             "defaultCalories": 106,
+            "goalProtein": 170.9,
+            "goalCarbo": 50.6,
+            "goalFat": 66,
             "weight": 80,
             "carbonohidrates": 0,
             "fat": 0,
