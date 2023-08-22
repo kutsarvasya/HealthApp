@@ -137,14 +137,30 @@ const updateMeal = async (req, res) => {
   res.json(newData);
 };
 
-const getStatistics = async (req, res) => {
+const getYearMonthStatistics = async (req, res) => {
   const { date } = req.query;
+  const { _id } = req.user;
 
   const state = await Meal.find({
     date: {
       $gt: `${date}-00`,
       $lt: `${date}-32`,
     },
+    owner: _id,
+  }).sort({ date: 1 });
+  res.json(state);
+};
+
+const getYearStatistics = async (req, res) => {
+  const { date } = req.query;
+  const { _id } = req.user;
+
+  const state = await Meal.find({
+    date: {
+      $gt: `${date}-01-01`,
+      $lt: `${parseInt(date) + 1}-01-01`,
+    },
+    owner: _id,
   }).sort({ date: 1 });
   res.json(state);
 };
@@ -153,6 +169,7 @@ export default {
   setWater: ctrlWrapper(setWater),
   getMealInfo: ctrlWrapper(getMealInfo),
   setMeal: ctrlWrapper(setMeal),
-  getStatistics: ctrlWrapper(getStatistics),
+  getYearMonthStatistics: ctrlWrapper(getYearMonthStatistics),
   updateMeal: ctrlWrapper(updateMeal),
+  getYearStatistics: ctrlWrapper(getYearStatistics),
 };
