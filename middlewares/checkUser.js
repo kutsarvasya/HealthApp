@@ -12,7 +12,9 @@ const checkUser = async (req, res, next) => {
   let goalFat;
   let goalProtein;
   let goalCarbo;
+
   const totalWater = 30 * weight;
+
   if (gender === "male") {
     BMR = Math.round(
       (88.362 + 13.397 * weight + 4.799 * height - 5.677 * age) * activity
@@ -41,7 +43,7 @@ const checkUser = async (req, res, next) => {
   } else {
     usersMeals = await Meal.findOneAndUpdate(
       { owner: _id, date: currentDate },
-      { weight: weight },
+      { weight: weight, defaultCalories: BMR, defaultWater: totalWater },
       { new: true }
     );
   }
