@@ -27,8 +27,16 @@ const setWater = async (req, res) => {
 
 const setMeal = async (req, res) => {
   const { _id } = req.user;
-  const { breakfast, dinner, snack, lunch, carbonohidrates, fat, protein } =
-    req.meals;
+  const {
+    breakfast,
+    dinner,
+    snack,
+    lunch,
+    carbonohidrates,
+    fat,
+    protein,
+    calories,
+  } = req.meals;
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const mealName = Object.keys(req.body)[0];
   const foodArr = req.body[mealName];
@@ -73,7 +81,7 @@ const setMeal = async (req, res) => {
         break;
     }
   });
-  const cal = proteinCal + carbonohidratesCal + fatCal;
+  const cal = proteinCal + carbonohidratesCal + fatCal + calories;
   const data = await Meal.findOneAndUpdate(
     { owner: _id, date: currentDate },
     {
