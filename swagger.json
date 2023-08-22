@@ -510,6 +510,42 @@
           }
         }
       }
+    },
+    "/api/user/statistics-year": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user's statistics of year",
+        "operationId": "date",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date for statistics",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]{4}$",
+              "description": "Date in the format yyyy"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistics  is successfully loaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatisticsYearResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -894,18 +930,228 @@
       "WeightResponse": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the entry"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of the entry"
+          },
+          "breakfast": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "foodName": {
+                  "type": "string",
+                  "description": "Name of the food"
+                },
+                "carbonohidrates": {
+                  "type": "string",
+                  "description": "Carbohydrate content"
+                },
+                "protein": {
+                  "type": "string",
+                  "description": "Protein content"
+                },
+                "fat": {
+                  "type": "string",
+                  "description": "Fat content"
+                }
+              }
+            },
+            "description": "Array of breakfast foods"
+          },
+          "lunch": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "foodName": {
+                  "type": "string",
+                  "description": "Name of the food"
+                },
+                "carbonohidrates": {
+                  "type": "string",
+                  "description": "Carbohydrate content"
+                },
+                "protein": {
+                  "type": "string",
+                  "description": "Protein content"
+                },
+                "fat": {
+                  "type": "string",
+                  "description": "Fat content"
+                }
+              }
+            },
+            "description": "Array of lunch foods"
+          },
+          "dinner": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "foodName": {
+                  "type": "string",
+                  "description": "Name of the food"
+                },
+                "carbonohidrates": {
+                  "type": "string",
+                  "description": "Carbohydrate content"
+                },
+                "protein": {
+                  "type": "string",
+                  "description": "Protein content"
+                },
+                "fat": {
+                  "type": "string",
+                  "description": "Fat content"
+                }
+              }
+            },
+            "description": "Array of dinner foods"
+          },
+          "snack": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "foodName": {
+                  "type": "string",
+                  "description": "Name of the food"
+                },
+                "carbonohidrates": {
+                  "type": "string",
+                  "description": "Carbohydrate content"
+                },
+                "protein": {
+                  "type": "string",
+                  "description": "Protein content"
+                },
+                "fat": {
+                  "type": "string",
+                  "description": "Fat content"
+                }
+              }
+            },
+            "description": "Array of snack foods"
+          },
+          "water": {
+            "type": "number",
+            "description": "Amount of water consumed"
+          },
+          "defaultWater": {
+            "type": "number",
+            "description": "Default water intake"
+          },
+          "calories": {
+            "type": "number",
+            "description": "Total calories consumed"
+          },
+          "defaultCalories": {
+            "type": "number",
+            "description": "Default daily calorie intake"
+          },
+          "goalFat": {
+            "type": "number",
+            "description": "Default daily fat"
+          },
+          "goalProtein": {
+            "type": "number",
+            "description": "Default daily protein"
+          },
+          "goalCarbo": {
+            "type": "number",
+            "description": "Default daily carbonohidrates"
+          },
           "weight": {
             "type": "number",
             "description": "User's weight"
           },
+          "carbonohidrates": {
+            "type": "number",
+            "description": "Total carbohydrates consumed"
+          },
+          "fat": {
+            "type": "number",
+            "description": "Total fat consumed"
+          },
+          "protein": {
+            "type": "number",
+            "description": "Total protein consumed"
+          },
           "changeWeight": {
             "type": "boolean",
-            "description": "User's change weight status"
+            "description": "user`s could change a weight only once a day"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Owner's unique identifier"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of creation"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of last update"
           }
         },
         "example": {
-          "weight": "55",
-          "changeWeight": true
+          "_id": "64e0cb6ba4cca7e38054c6c0",
+          "date": "2023-08-19",
+          "breakfast": [
+            {
+              "foodName": "avocado",
+              "carbonohidrates": "5",
+              "protein": "3",
+              "fat": "10"
+            }
+          ],
+          "lunch": [
+            {
+              "foodName": "cucumber",
+              "carbonohidrates": "2",
+              "protein": "3",
+              "fat": "0"
+            }
+          ],
+          "dinner": [
+            {
+              "foodName": "apple",
+              "carbonohidrates": "10",
+              "protein": "4",
+              "fat": "6"
+            }
+          ],
+          "snack": [
+            {
+              "foodName": "nuts",
+              "carbonohidrates": "7",
+              "protein": "4",
+              "fat": "10"
+            }
+          ],
+          "water": 120,
+          "defaultWater": 1680,
+          "calories": 120,
+          "defaultCalories": 2155,
+          "goalProtein": 170.9,
+          "goalCarbo": 50.6,
+          "goalFat": 66,
+          "weight": 55,
+          "carbonohidrates": 24,
+          "fat": 26,
+          "protein": 14,
+          "changeWeight": true,
+          "owner": "64e0b44df60b0daed597d02c",
+          "createdAt": "2023-08-19T14:02:19.484Z",
+          "updatedAt": "2023-08-19T14:15:30.669Z"
         }
       },
       "GoalRequest": {
@@ -1667,7 +1913,7 @@
                 "date": {
                   "type": "string",
                   "format": "date",
-                  "description": "Date in the format yyyy-mm-dd"
+                  "description": "Date in the format yyyy-mm"
                 },
                 "breakfast": {
                   "type": "array",
@@ -1941,6 +2187,258 @@
             "description": "User's activity"
           }
         }
+      },
+      "StatisticsYearResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Unique ID"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Date in the format yyyy"
+                },
+                "breakfast": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
+                    }
+                  },
+                  "description": "Breakfast details"
+                },
+                "lunch": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
+                    }
+                  },
+                  "description": "Lunch details"
+                },
+                "dinner": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
+                    }
+                  },
+                  "description": "Dinner details"
+                },
+                "snack": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "foodName": {
+                        "type": "string",
+                        "description": "Name of the food"
+                      },
+                      "carbonohidrates": {
+                        "type": "number",
+                        "description": "Carbohydrate content"
+                      },
+                      "protein": {
+                        "type": "number",
+                        "description": "Protein content"
+                      },
+                      "fat": {
+                        "type": "number",
+                        "description": "Fat content"
+                      }
+                    }
+                  },
+                  "description": "Snack details"
+                },
+                "water": {
+                  "type": "number",
+                  "description": "Water consumed"
+                },
+                "defaultWater": {
+                  "type": "number",
+                  "description": "Default water intake"
+                },
+                "calories": {
+                  "type": "number",
+                  "description": "Calories consumed"
+                },
+                "defaultCalories": {
+                  "type": "number",
+                  "description": "Default calorie intake"
+                },
+                "goalFat": {
+                  "type": "number",
+                  "description": "Default daily fat"
+                },
+                "goalProtein": {
+                  "type": "number",
+                  "description": "Default daily protein"
+                },
+                "goalCarbo": {
+                  "type": "number",
+                  "description": "Default daily carbonohidrates"
+                },
+                "weight": {
+                  "type": "number",
+                  "description": "User's weight"
+                },
+                "carbonohidrates": {
+                  "type": "number",
+                  "description": "Carbohydrate intake"
+                },
+                "fat": {
+                  "type": "number",
+                  "description": "Fat intake"
+                },
+                "protein": {
+                  "type": "number",
+                  "description": "Protein intake"
+                },
+                "changeWeight": {
+                  "type": "boolean",
+                  "description": "Whether user is tracking weight change"
+                },
+                "owner": {
+                  "type": "string",
+                  "description": "ID of the owner"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Creation timestamp"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Update timestamp"
+                }
+              }
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "64e4bcff1de428d7a78ab440",
+            "date": "2023-07-22",
+            "breakfast": [
+              {
+                "foodName": "avocado",
+                "carbonohidrates": "12",
+                "protein": "50",
+                "fat": "23"
+              },
+              {
+                "foodName": "apple",
+                "carbonohidrates": "10",
+                "protein": "12",
+                "fat": "5"
+              }
+            ],
+            "lunch": [],
+            "dinner": [
+              {
+                "foodName": "apple",
+                "carbonohidrates": "5",
+                "protein": "6",
+                "fat": "2"
+              }
+            ],
+            "snack": [],
+            "water": 0,
+            "defaultWater": 3000,
+            "calories": 847,
+            "defaultCalories": 2689,
+            "weight": 100,
+            "carbonohidrates": 27,
+            "fat": 30,
+            "protein": 68,
+            "changeWeight": true,
+            "goalProtein": 201.7,
+            "goalCarbo": 268.9,
+            "goalFat": 201.7,
+            "owner": "64e3b4d44ec8839debc8e56d",
+            "createdAt": "2023-08-22T13:49:51.108Z",
+            "updatedAt": "2023-08-22T14:34:04.931Z"
+          },
+          {
+            "_id": "64e4b6259411a71be2e3cb37",
+            "date": "2023-08-22",
+            "breakfast": [],
+            "lunch": [],
+            "dinner": [],
+            "snack": [],
+            "water": 0,
+            "defaultWater": 2670,
+            "calories": 0,
+            "defaultCalories": 2244,
+            "weight": 89,
+            "carbonohidrates": 0,
+            "fat": 0,
+            "protein": 0,
+            "changeWeight": false,
+            "goalProtein": 168.3,
+            "goalCarbo": 224.4,
+            "goalFat": 168.3,
+            "owner": "64e3b4d44ec8839debc8e56d",
+            "createdAt": "2023-08-22T13:20:37.572Z",
+            "updatedAt": "2023-08-22T13:57:15.590Z"
+          }
+        ]
       }
     },
     "securitySchemes": {

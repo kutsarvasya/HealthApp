@@ -27,8 +27,16 @@ const setWater = async (req, res) => {
 
 const setMeal = async (req, res) => {
   const { _id } = req.user;
-  const { breakfast, dinner, snack, lunch, carbonohidrates, fat, protein } =
-    req.meals;
+  const {
+    breakfast,
+    dinner,
+    snack,
+    lunch,
+    carbonohidrates,
+    fat,
+    protein,
+    calories,
+  } = req.meals;
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const mealName = Object.keys(req.body)[0];
   const foodArr = req.body[mealName];
@@ -73,7 +81,7 @@ const setMeal = async (req, res) => {
         break;
     }
   });
-  const cal = proteinCal + carbonohidratesCal + fatCal;
+  const cal = proteinCal + carbonohidratesCal + fatCal + calories;
   const data = await Meal.findOneAndUpdate(
     { owner: _id, date: currentDate },
     {
@@ -129,14 +137,30 @@ const updateMeal = async (req, res) => {
   res.json(newData);
 };
 
-const getStatistics = async (req, res) => {
+const getYearMonthStatistics = async (req, res) => {
   const { date } = req.query;
+  const { _id } = req.user;
 
   const state = await Meal.find({
     date: {
       $gt: `${date}-00`,
       $lt: `${date}-32`,
     },
+    owner: _id,
+  }).sort({ date: 1 });
+  res.json(state);
+};
+
+const getYearStatistics = async (req, res) => {
+  const { date } = req.query;
+  const { _id } = req.user;
+
+  const state = await Meal.find({
+    date: {
+      $gt: `${date}-01-01`,
+      $lt: `${parseInt(date) + 1}-01-01`,
+    },
+    owner: _id,
   }).sort({ date: 1 });
   res.json(state);
 };
@@ -145,6 +169,7 @@ export default {
   setWater: ctrlWrapper(setWater),
   getMealInfo: ctrlWrapper(getMealInfo),
   setMeal: ctrlWrapper(setMeal),
-  getStatistics: ctrlWrapper(getStatistics),
+  getYearMonthStatistics: ctrlWrapper(getYearMonthStatistics),
   updateMeal: ctrlWrapper(updateMeal),
+  getYearStatistics: ctrlWrapper(getYearStatistics),
 };

@@ -3,8 +3,27 @@ import { format } from "date-fns";
 import Meal from "../models/Meal.js";
 
 const checkUser = async (req, res, next) => {
-  const { _id, gender, age, height, weight, activity } = req.user;
+  const {
+    _id,
+    gender: currentGender,
+    age: currentAge,
+    height: currentHeight,
+    weight: currentWeight,
+    activity: currentActivity,
+  } = req.user;
+  const {
+    weight: newWeight,
+    age: newAge,
+    height: newHeight,
+    activity: newActivity,
+    gender: newGender,
+  } = req.body;
 
+  const weight = newWeight ? newWeight : currentWeight;
+  const age = newAge ? newAge : currentAge;
+  const height = newHeight ? newHeight : currentHeight;
+  const activity = newActivity ? newActivity : currentActivity;
+  const gender = newGender ? newGender : currentGender;
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const data = await Meal.findOne({ owner: _id, date: currentDate });
 
@@ -43,7 +62,8 @@ const checkUser = async (req, res, next) => {
   } else {
     usersMeals = await Meal.findOneAndUpdate(
       { owner: _id, date: currentDate },
-      { weight: weight, defaultCalories: BMR, defaultWater: totalWater },
+      { weight: weight, defaultWater: totalWater, defaultCalories: BMR },
+
       { new: true }
     );
   }
