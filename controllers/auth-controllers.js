@@ -155,12 +155,9 @@ const login = async (req, res) => {
     { new: true }
   );
 
-  res.json(
-    {
-      user: newUser,
-    },
-    { new: true }
-  );
+  res.json({
+    user: newUser,
+  });
 };
 
 const getCurrent = async (req, res) => {
