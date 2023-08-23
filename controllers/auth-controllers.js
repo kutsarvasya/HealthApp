@@ -2,14 +2,21 @@ import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
 import generator from "generate-password";
-
+import axios from "axios";
+import queryString from "query-string";
 import User from "../models/User.js";
 import { HttpError, mailer } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import envConfig from "../configs/envConfigs.js";
 
-
-const { JWT_SECRET, UKR_NET_EMAIL } = envConfig;
+const {
+  JWT_SECRET,
+  UKR_NET_EMAIL,
+  FRONTEND_URL,
+  BASE_URL,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_CLIENT_ID,
+} = envConfig;
 
 const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -48,6 +55,82 @@ const signup = async (req, res) => {
   });
 };
 
+const googleAuth = async (req, res) => {
+  const stringifiedParams = queryString.stringify({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ].join(" "),
+    response_type: "code",
+    access_type: "offline",
+    prompt: "consent",
+  });
+  return res.redirect(
+    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
+  );
+};
+
+const googleRedirect = async (req, res) => {
+  const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  const urlObj = new URL(fullUrl);
+  const urlParams = queryString.parse(urlObj.search);
+  const code = urlParams.code;
+
+  const tokenData = await axios({
+    url: "https://oauth2.googleapis.com/token",
+    method: "post",
+    data: {
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
+      grant_type: "authorization_code",
+      code,
+    },
+  });
+
+  const userData = await axios({
+    url: "https://www.googleapis.com/oauth2/v2/userinfo",
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${tokenData.data.access_token}`,
+    },
+  });
+
+  const accessToken = tokenData.data.access_token;
+
+  const userEmail = userData.data.email;
+
+  const isUserExist = await User.findOne({ email: userEmail });
+  if (!isUserExist) {
+    const newUser = await User.create({
+      email: userEmail,
+    });
+
+    const payload = {
+      id: newUser._id,
+    };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+    await User.findByIdAndUpdate(newUser._id, { token });
+
+    isUserExist = newUser;
+    isUserExist.accessToken = accessToken;
+    await isUserExist.save();
+
+    return res.redirect(
+      `${FRONTEND_URL}/signup/goal?accessToken=${accessToken}&email=${userData.data.email}`
+    );
+  }
+
+  const token = accessToken;
+  await User.findByIdAndUpdate(isUserExist._id, { token });
+
+  return res.redirect(
+    `${FRONTEND_URL}/signup/goal?accessToken=${accessToken}&email=${userData.data.email}`
+  );
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -68,9 +151,12 @@ const login = async (req, res) => {
 
   const newUser = await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({
-    user: newUser,
-  });
+  res.json(
+    {
+      user: newUser,
+    },
+    { new: true }
+  );
 };
 
 const getCurrent = async (req, res) => {
@@ -153,4 +239,6 @@ export default {
   resendPassword: ctrlWrapper(resendPassword),
   uploadAvatar: ctrlWrapper(uploadAvatar),
   requirements: ctrlWrapper(requirements),
+  googleAuth: ctrlWrapper(googleAuth),
+  googleRedirect: ctrlWrapper(googleRedirect),
 };
