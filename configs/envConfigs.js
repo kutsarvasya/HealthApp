@@ -9,6 +9,11 @@ const envConfig = {
   JWT_SECRET: process.env.JWT_SECRET,
   UKR_NET_EMAIL: process.env.UKR_NET_EMAIL,
   UKR_NET_PASSWORD: process.env.UKR_NET_PASSWORD,
+
+  BASE_URL: process.env.BASE_URL,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  FRONTEND_URL: process.env.FRONTEND_URL,
 };
 
 export default envConfig;
