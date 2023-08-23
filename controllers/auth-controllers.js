@@ -8,7 +8,6 @@ import { HttpError, mailer } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import envConfig from "../configs/envConfigs.js";
 
-
 const { JWT_SECRET, UKR_NET_EMAIL } = envConfig;
 
 const signup = async (req, res) => {
@@ -66,7 +65,11 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
-  const newUser = await User.findByIdAndUpdate(user._id, { token });
+  const newUser = await User.findByIdAndUpdate(
+    user._id,
+    { token },
+    { new: true }
+  );
 
   res.json({
     user: newUser,
