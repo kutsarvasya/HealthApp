@@ -55,82 +55,6 @@ const signup = async (req, res) => {
   });
 };
 
-const googleAuth = async (req, res) => {
-  const stringifiedParams = queryString.stringify({
-    client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile",
-    ].join(" "),
-    response_type: "code",
-    access_type: "offline",
-    prompt: "consent",
-  });
-  return res.redirect(
-    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
-  );
-};
-
-const googleRedirect = async (req, res) => {
-  const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
-  const urlObj = new URL(fullUrl);
-  const urlParams = queryString.parse(urlObj.search);
-  const code = urlParams.code;
-
-  const tokenData = await axios({
-    url: "https://oauth2.googleapis.com/token",
-    method: "post",
-    data: {
-      client_id: GOOGLE_CLIENT_ID,
-      client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
-      grant_type: "authorization_code",
-      code,
-    },
-  });
-
-  const userData = await axios({
-    url: "https://www.googleapis.com/oauth2/v2/userinfo",
-    method: "get",
-    headers: {
-      Authorization: `Bearer ${tokenData.data.access_token}`,
-    },
-  });
-
-  const accessToken = tokenData.data.access_token;
-
-  const userEmail = userData.data.email;
-
-  const isUserExist = await User.findOne({ email: userEmail });
-  if (!isUserExist) {
-    const newUser = await User.create({
-      email: userEmail,
-    });
-
-    const payload = {
-      id: newUser._id,
-    };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
-    await User.findByIdAndUpdate(newUser._id, { token });
-
-    isUserExist = newUser;
-    isUserExist.accessToken = accessToken;
-    await isUserExist.save();
-
-    return res.redirect(
-      `${FRONTEND_URL}/signup/goal?accessToken=${accessToken}&email=${userData.data.email}`
-    );
-  }
-
-  const token = accessToken;
-  await User.findByIdAndUpdate(isUserExist._id, { token });
-
-  return res.redirect(
-    `${FRONTEND_URL}/signup/goal?accessToken=${accessToken}&email=${userData.data.email}`
-  );
-};
-
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -230,6 +154,103 @@ const requirements = async (req, res) => {
     { new: true }
   );
   res.status(200).json(user);
+};
+
+const googleAuth = async (req, res) => {
+  const stringifiedParams = queryString.stringify({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ].join(" "),
+    response_type: "code",
+    access_type: "offline",
+    prompt: "consent",
+  });
+  return res.redirect(
+    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
+  );
+};
+
+const googleRedirect = async (req, res) => {
+  const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  const urlObj = new URL(fullUrl);
+  const urlParams = queryString.parse(urlObj.search);
+  const code = urlParams.code;
+
+  const tokenData = await axios({
+    url: "https://oauth2.googleapis.com/token",
+    method: "post",
+    data: {
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
+      grant_type: "authorization_code",
+      code,
+    },
+  });
+
+  const userData = await axios({
+    url: "https://www.googleapis.com/oauth2/v2/userinfo",
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${tokenData.data.access_token}`,
+    },
+  });
+
+  const accessToken = tokenData.data.access_token;
+
+  const userEmail = userData.data.email;
+  const userName = userData.data.name;
+  const avatarURL = gravatar.url(email);
+  const userAge = userData.data.age;
+  const userWeight = userData.data.weight;
+  const userHeight = userData.data.height;
+  const userRequirements = userData.data.requirements;
+  const userGoal = userData.data.goal;
+  const userChangeWeight = userData.data.changeWeight;
+  const userGender = userData.data.gender;
+  const userActivity = userData.data.activity;
+
+  const newPassword = generator.generate({
+    length: 10,
+    numbers: true,
+    lowercase: true,
+    uppercase: true,
+  });
+  const hashPassword = await bcrypt.hash(newPassword, 10);
+
+  const user = await User.findOne({ email: userEmail });
+
+  if (!user) {
+    const newUser = await User.create({
+      name: userName,
+      email: userEmail,
+      token: accessToken,
+      password: hashPassword,
+      goal: userGoal,
+      gender: userGender,
+      age: userAge,
+      weight: userWeight,
+      height: userHeight,
+      requirements: userRequirements,
+      activity: userActivity,
+      changeWeight: userChangeWeight,
+      avatarURL,
+    });
+
+    return res.redirect(
+      `http://localhost:3000/health-app/signup/goal?accessToken=${newUser.token}&email=${newUser.email}&name=${newUser.name}&goal=${newUser.goal}&gender=${newUser.gender}&`
+    );
+  }
+
+  const token = accessToken;
+  await User.findByIdAndUpdate(user._id, { token });
+
+  return res.redirect(
+    `http://localhost:3000/health-app/signup/goal?accessToken=${newUser.token}&email=${newUser.email}&name=${newUser.name}&goal=${newUser.goal}&gender=${newUser.gender}&`
+  );
 };
 
 export default {
