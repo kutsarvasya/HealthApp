@@ -27,10 +27,14 @@ const changeWeight = async (req, res) => {
   }
 
   const user = await User.findByIdAndUpdate(_id, { weight }, { new: true });
-  const newMeal = await Meal.findByIdAndUpdate(mealsId, {
-    changeWeight: true,
-    weight: user.weight,
-  });
+  const newMeal = await Meal.findByIdAndUpdate(
+    mealsId,
+    {
+      changeWeight: true,
+      weight: user.weight,
+    },
+    { new: true }
+  );
 
   res.json(newMeal);
 };
