@@ -226,7 +226,7 @@ const googleRedirect = async (req, res) => {
     });
 
     return res.redirect(
-      `http://localhost:3000/health-app/googleAuth/email=${newUser.email}&token=${newUser.token}&name=${newUser.name}&avatarURL=${newUser.avatarURL}&requirements=${newUser.requirements}&goal=${newUser.goal}&gender=${newUser.gender}&age=${newUser.age}&height=${newUser.height}&weight=${newUser.weight}&activity=${newUser.activity}`
+      `http://localhost:3000/health-app/googleAuth?email=${newUser.email}&token=${newUser.token}&name=${newUser.name}&avatarURL=${newUser.avatarURL}&requirements=${newUser.requirements}&goal=${newUser.goal}&gender=${newUser.gender}&age=${newUser.age}&height=${newUser.height}&weight=${newUser.weight}&activity=${newUser.activity}`
     );
   }
 
@@ -234,7 +234,7 @@ const googleRedirect = async (req, res) => {
   // await User.findByIdAndUpdate(user._id, { token });
 
   return res.redirect(
-    `http://localhost:3000/health-app/googleAuth/email=${user.email}&token=${user.token}&name=${user.name}&avatarURL=${user.avatarURL}&requirements=${user.requirements}&goal=${user.goal}&gender=${user.gender}&age=${user.age}&height=${user.height}&weight=${user.weight}&activity=${user.activity}`
+    `http://localhost:3000/health-app/googleAuth?email=${user.email}&token=${user.token}&name=${user.name}&avatarURL=${user.avatarURL}&requirements=${user.requirements}&goal=${user.goal}&gender=${user.gender}&age=${user.age}&height=${user.height}&weight=${user.weight}&activity=${user.activity}`
   );
 };
 
