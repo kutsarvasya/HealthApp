@@ -201,7 +201,6 @@ const googleRedirect = async (req, res) => {
     },
   });
 
-  const accessToken = tokenData.data.access_token;
   const userEmail = userData.data.email;
   const userName = userData.data.name;
   const avatarURL = gravatar.url(userEmail);
@@ -220,13 +219,16 @@ const googleRedirect = async (req, res) => {
     const newUser = await User.create({
       name: userName,
       email: userEmail,
-      token: accessToken,
       password: hashPassword,
       avatarURL,
     });
-
+    const payload = {
+      id: newUser._id,
+    };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+    await User.findByIdAndUpdate(newUser._id, { token });
     return res.redirect(
-      `http://localhost:3000/health-app/googleAuth?email=${newUser.email}&token=${newUser.token}&name=${newUser.name}&avatarURL=${newUser.avatarURL}&requirements=${newUser.requirements}&goal=${newUser.goal}&gender=${newUser.gender}&age=${newUser.age}&height=${newUser.height}&weight=${newUser.weight}&activity=${newUser.activity}`
+      `http://localhost:3000/health-app/googleAuth?email=${newUser.email}&token=${token}&name=${newUser.name}&avatarURL=${newUser.avatarURL}&requirements=${newUser.requirements}&goal=${newUser.goal}&gender=${newUser.gender}&age=${newUser.age}&height=${newUser.height}&weight=${newUser.weight}&activity=${newUser.activity}`
     );
   }
 
