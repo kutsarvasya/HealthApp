@@ -200,18 +200,9 @@ const googleRedirect = async (req, res) => {
   });
 
   const accessToken = tokenData.data.access_token;
-
   const userEmail = userData.data.email;
   const userName = userData.data.name;
-  const avatarURL = gravatar.url(email);
-  const userAge = userData.data.age;
-  const userWeight = userData.data.weight;
-  const userHeight = userData.data.height;
-  const userRequirements = userData.data.requirements;
-  const userGoal = userData.data.goal;
-  const userChangeWeight = userData.data.changeWeight;
-  const userGender = userData.data.gender;
-  const userActivity = userData.data.activity;
+  const avatarURL = gravatar.url(userEmail);
 
   const newPassword = generator.generate({
     length: 10,
@@ -229,28 +220,19 @@ const googleRedirect = async (req, res) => {
       email: userEmail,
       token: accessToken,
       password: hashPassword,
-      goal: userGoal,
-      gender: userGender,
-      age: userAge,
-      weight: userWeight,
-      height: userHeight,
-      requirements: userRequirements,
-      activity: userActivity,
-      changeWeight: userChangeWeight,
       avatarURL,
     });
 
     return res.redirect(
-      `http://localhost:3000/health-app/signup/goal?accessToken=${newUser.token}&email=${newUser.email}&name=${newUser.name}&goal=${newUser.goal}&gender=${newUser.gender}&`
+      `http://localhost:3000/health-app/signup/goal?email=${newUser.email}&token=${newUser.token}`
     );
   }
+  console.log(222);
 
-  const token = accessToken;
-  await User.findByIdAndUpdate(user._id, { token });
+  // const token = accessToken;
+  // await User.findByIdAndUpdate(user._id, { token });
 
-  return res.redirect(
-    `http://localhost:3000/health-app/signup/goal?accessToken=${newUser.token}&email=${newUser.email}&name=${newUser.name}&goal=${newUser.goal}&gender=${newUser.gender}&`
-  );
+  // return res.redirect(`http://localhost:3000/health-app/signup/goal`);
 };
 
 export default {
